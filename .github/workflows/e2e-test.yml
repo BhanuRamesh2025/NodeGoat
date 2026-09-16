@@ -2,7 +2,7 @@ name: E2E Test
 on: [push, pull_request]
 
 permissions:
-  contents: read  
+  contents: read
 
 jobs:
   e2e-test:
@@ -58,17 +58,17 @@ jobs:
 
       - name: Upload cypress artifacts
         if: failure() && (steps.test-suite.outcome == 'failure')
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v4
         with:
           name: cypress-artifacts-node${{ matrix.node-version }}
           path: test/e2e/screenshots
 
-       - name: Package application
+      - name: Package application
         run: npm pack
 
-        - name: Upload package artifact
-          uses: actions/upload-artifact@v4
-          with:
-            name: nodegoat-package
-            path: "*.tgz"
+      - name: Upload package artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: nodegoat-package
+          path: "*.tgz"
 
