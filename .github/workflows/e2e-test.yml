@@ -12,21 +12,21 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        node-version: ["10.x", "12.x", "14.x"]
+        node-version: ["18.x", "20.x"]
 
     steps:
       - name: Checkout https://github.com/${{ github.repository }}@${{ github.ref }}
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
         with:
           persist-credentials: false
 
       - name: Set up Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v1
+        uses: actions/setup-node@v4
         with:
           node-version: ${{ matrix.node-version }}
 
       - name: Use cache
-        uses: actions/cache@v2
+        uses: actions/cache@v4
         with:
           path: |
             ~/.npm
@@ -62,3 +62,13 @@ jobs:
         with:
           name: cypress-artifacts-node${{ matrix.node-version }}
           path: test/e2e/screenshots
+
+       - name: Package application
+        run: npm pack
+
+        - name: Upload package artifact
+          uses: actions/upload-artifact@v4
+          with:
+            name: nodegoat-package
+            path: "*.tgz"
+
